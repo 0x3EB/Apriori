@@ -11,8 +11,8 @@ def createLk(data,e,Lk=None,k=1):
     data : Array of Array
         Data contains the initial dataset.
     e : int
-        DESCRIPTION.
-    Lk : TYPE, optional
+        The number min of occurence (min support).
+    Lk : Dictonnary, optional
         Lk is the previous itemset. The default is None.
     k : int, optional
         k is the level of item set (Lk)
