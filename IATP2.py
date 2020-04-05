@@ -7,16 +7,15 @@ Created on Sat Apr  4 16:26:23 2020
 
 def createLk(data,e,Lk=None,k=1):
     Ck = []
-    test = []
-    aa = []
+    tupleNPreviousplets = []
+    listNplets = []
+    tupleNplets = []
     ScanC = {}
     if Lk is None:
-
         for transaction in data:
             for item in transaction:
                 if not [transaction,item] in Ck: Ck.append(item)
         ScanC = {x : Ck.count(x) for x in Ck if Ck.count(x)>=e}
-        #createLk(data,e,ScanC,k+1)
     else:
         ScanC.update(Lk)
         keys = list(Lk.keys())
@@ -29,24 +28,21 @@ def createLk(data,e,Lk=None,k=1):
                     in_second = set(list(keys[j+1]))
                     in_second_but_not_in_first = in_second - in_first
                     result = list(keys[i]) + list(in_second_but_not_in_first)
-                    if (all(elem in result for elem in aa)) and len(result)==k: aa.append(result)
+                    if (all(elem in result for elem in listNplets)) and len(result)==k: listNplets.append(result)
         for i in data:
             for j in Ck:
                 if isinstance(i,list) and isinstance(j,list):
                     if(all(elem in i for elem in j)):
-                        test.append(tuple(j))
-        bb = []
+                        tupleNPreviousplets.append(tuple(j))
         for i in data:
-            for j in aa:
+            for j in listNplets:
                 if isinstance(i,list) and isinstance(j,list):
                     if(all(elem in i for elem in j)):
-                        if j not in bb: bb.append(tuple(j))
-        if len(test)>0:
-            ScanC.update({x : test.count(x) for x in test if test.count(x)>=e})
-        if len(bb)>0:
-            ScanC.update({x : bb.count(x) for x in bb if bb.count(x)>=e})
+                        if j not in tupleNplets: tupleNplets.append(tuple(j))
+        if len(tupleNPreviousplets)>0: ScanC.update({x : tupleNPreviousplets.count(x) for x in tupleNPreviousplets if tupleNPreviousplets.count(x)>=e})
+        if len(tupleNplets)>0: ScanC.update({x : tupleNplets.count(x) for x in tupleNplets if tupleNplets.count(x)>=e})
         if len(Lk) == len(ScanC):
-          return ScanC
+            return ScanC
     return createLk(data,e,ScanC,k+1)
 
 def apriori(T,e):
