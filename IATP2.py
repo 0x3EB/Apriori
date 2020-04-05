@@ -5,67 +5,54 @@ Created on Sat Apr  4 16:26:23 2020
 @author: sebas
 """
 
-def createCk(data,e,Lk=None,k=0):
-    k+=1
+def createLk(data,e,Lk=None,k=1):
     Ck = []
     test = []
     aa = []
     ScanC = {}
-    if Lk is not None:
-        print(f'TAILLE DE LK : ',len(Lk))
-        ScanC.update(Lk)
-        if len(Lk) > 1:
-            t = list(Lk.keys())
-            for i in range(0,len(Lk)-1):
-                for j in range(i,len(Lk)-1):
-                    if isinstance(t[i],int) and isinstance(t[j+1],int):
-                        Ck.append([t[i],t[j+1]])
-                    elif isinstance(t[i],tuple) and isinstance(t[j+1],tuple):
-                        in_first = set(list(t[i]))
-                        in_second = set(list(t[j+1]))
-                        in_second_but_not_in_first = in_second - in_first
-                        result = list(t[i]) + list(in_second_but_not_in_first)
-                        if (all(elem in result for elem in aa)) and len(result)==k: aa.append(result)
-            for i in data:
-                for j in Ck:
-                    if isinstance(i,list) and isinstance(j,list):
-                        if(all(elem in i for elem in j)):
-                            test.append(tuple(j))
-            bb = []
-            for i in data:
-                for j in aa:
-                    if isinstance(i,list) and isinstance(j,list):
-                        if(all(elem in i for elem in j)):
-                            if j not in bb: bb.append(tuple(j))
-            if len(test)>0:
-                ScanC.update({x : test.count(x) for x in test if test.count(x)>=e})
-            if len(bb)>0:
-                ScanC.update({x : bb.count(x) for x in bb if bb.count(x)>=e})
-            testWithoutDuplicates = [t for t in (set(tuple(i) for i in test))] 
-            bbWithoutDuplicates = [t for t in (set(tuple(i) for i in bb))] 
-            print(f'len de test ss dupl',len(testWithoutDuplicates))
-            print(f'len de bb ss dupl',len(bbWithoutDuplicates))
-            print(f'len de aa ss dupl',len(aa))
-            print(f'len de ck ss dupl',len(Ck))
-            print(bb)
-            print(k)
-            print(len(testWithoutDuplicates)+k)
-            if not (len(testWithoutDuplicates)+k == len(Lk)):
-                createCk(data,e,ScanC,k)                
-    else:     
+    if Lk is None:
+
         for transaction in data:
             for item in transaction:
                 if not [transaction,item] in Ck: Ck.append(item)
         ScanC = {x : Ck.count(x) for x in Ck if Ck.count(x)>=e}
-        createCk(data,e,ScanC,k)
-    return ScanC
+        #createLk(data,e,ScanC,k+1)
+    else:
+        ScanC.update(Lk)
+        keys = list(Lk.keys())
+        for i in range(0,len(Lk)-1):
+            for j in range(i,len(Lk)-1):
+                if isinstance(keys[i],int) and isinstance(keys[j+1],int):
+                    Ck.append([keys[i],keys[j+1]])
+                elif isinstance(keys[i],tuple) and isinstance(keys[j+1],tuple):
+                    in_first = set(list(keys[i]))
+                    in_second = set(list(keys[j+1]))
+                    in_second_but_not_in_first = in_second - in_first
+                    result = list(keys[i]) + list(in_second_but_not_in_first)
+                    if (all(elem in result for elem in aa)) and len(result)==k: aa.append(result)
+        for i in data:
+            for j in Ck:
+                if isinstance(i,list) and isinstance(j,list):
+                    if(all(elem in i for elem in j)):
+                        test.append(tuple(j))
+        bb = []
+        for i in data:
+            for j in aa:
+                if isinstance(i,list) and isinstance(j,list):
+                    if(all(elem in i for elem in j)):
+                        if j not in bb: bb.append(tuple(j))
+        if len(test)>0:
+            ScanC.update({x : test.count(x) for x in test if test.count(x)>=e})
+        if len(bb)>0:
+            ScanC.update({x : bb.count(x) for x in bb if bb.count(x)>=e})
+        if len(Lk) == len(ScanC):
+          return ScanC
+    return createLk(data,e,ScanC,k+1)
 
 def apriori(T,e):
-    res = {}
-    #res.update(createCk(T,e,createCk(T,e,createCk(T,e,createCk(T,e)))))
-    print(createCk(T,e))
-
+    return createLk(T,e)
 
 if __name__ == '__main__':
     dataset = [[1, 2, 5], [1, 3, 5], [1, 2], [1, 2, 3, 4, 5], [1, 2, 4, 5], [2, 3, 5], [1, 5]]
-    apriori(dataset,3)
+    L = apriori(dataset,3)
+    print(L)
