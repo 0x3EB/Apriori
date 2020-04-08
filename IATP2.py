@@ -75,6 +75,8 @@ if __name__ == '__main__':
     dataset = [[1, 2, 5], [1, 3, 5], [1, 2], [1, 2, 3, 4, 5], [1, 2, 4, 5], [2, 3, 5], [1, 5]]
     dataset2 = [[1, 3, 4], [2, 3, 5], [1, 2, 3, 5], [2, 5], [1, 3, 5]]
     dataset3 = [[1, 2, 3, 4], [2, 3, 5], [1, 2, 3, 5], [2, 5], [1, 3, 5], [1, 5], [2, 3, 4], [1, 3, 4, 5]]
-    datasetString = [['A','C','D'],['B','C','E'],['A','B','C','E'],['B','E']]
-    L = apriori(datasetString,2)
+    dataset2String = [['A','C','D'],['B','C','E'],['A','B','C','E'],['B','E']] #same as dataset2 but with strings
+    L = apriori(dataset,3)
+    #L = apriori(dataset3,2)
+    #L = apriori(dataset2String,2)
     print(L)
